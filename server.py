@@ -3,7 +3,7 @@ import os
 from flask import Flask, request, json
 import matplotlib.pyplot as plt
 import imageio
-from process import *
+from processor import *
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -18,8 +18,8 @@ def upload_img():
     img = request.files.get('bitmap')
     path = basedir + "/img/" + img.filename
     img.save(path)
-    img2 = imageio.imread(path)
-    ret = predict(img2)
+    img2 = cv2.imread(path, cv2.IMREAD_COLOR)
+    ret = process(img2)
     plt.imshow(img2)
     plt.show()
     # 'degree' 可选
@@ -29,6 +29,5 @@ def upload_img():
 
 
 if __name__ == '__main__':
-    load_net()
-    load_model()
+    init()
     app.run(host='0.0.0.0')
